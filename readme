@@ -1,88 +1,106 @@
-# 🧪 API Testing Automation (Playwright + TypeScript + Faker)
-
-This project demonstrates **API automation testing** using **Playwright**, **TypeScript**, and **Axios**, following a **modular and scalable structure**.  
-It covers complete CRUD (Create, Read, Update, Delete) flow with both **live API** and **faker-based local simulation**.
+# 🧪 Playwright API Automation – CRUD Framework
+OVERVIEW
+This project demonstrates a **modular API Test Automation Framework** using **Playwright + TypeScript**.  
+It performs a full **CRUD flow** (`Create → Read → Update → Delete`) multiple times with **dynamic data** generated using **Faker**.  
+The API base URL is configured via `config.properties`.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Tech Stack
 
-APITESTING/
+| Tool | Purpose |
+|------|----------|
+| **Playwright** | API request engine + test runner |
+| **TypeScript** | Strong typing & modular architecture |
+| **Faker (@faker-js/faker)** | Generate random data for each run |
+| **Axios** | HTTP client to send API requests |
+| **properties-reader** | To read config from `config.properties` |
+
+---
+
+## 🧩 Folder Structure
+
+DAPITESTING/
 │
 ├── src/
-│ ├── apiClient.ts # Axios instance with baseURL & headers
-│ ├── apiMethods.ts # Reusable GET, POST, PUT, DELETE functions
+│ ├── apiClient.ts #(baseURL, headers),Contains reusable GET, POST, PUT, DELETE methods
 │ ├── endpoints.ts # Enum for API endpoints
+│ ├── utils/
+│ │ └── library.ts # Random data generator using Faker
 │ └── tests/
-│ └── test.spec.ts # CRUD automation test file (Faker + Live API)
+│ └── test.spec.ts # Main Playwright test for CRUD flow
 │
-├── config.properties # Stores API base URL and token
-├── playwright.config.ts # Playwright configuration
+├── config.properties # Stores API base URL
+├── playwright.config.ts # Playwright test configuration
 ├── package.json # Dependencies & scripts
-└── README.md # Project documentation
+└── README.md # Documentation
 
 
----
 
-## ⚙️ Setup Instructions
-
-### 1️⃣ Clone the repository
-```bash
-git clone https://github.com/<your-username>/APITESTING.git
+## ⚙️ Installation
 cd APITESTING
-
-
-2️⃣ Install dependencies
 npm install
+npx playwright install
 
-3️⃣ Configure API details
-Edit the file config.properties and add your API base URL 
-BASE_URL=https://petstore.swagger.io/v2
-header
-content-type  , application
+#config.properties
+baseUrl=https://petstore.swagger.io/v2
 
-
-4️⃣ Run the test suite
+🧪 Run Tests
+Normal Run
 npx playwright test
 
+🔁 CRUD Flow Summary
+
+Each test iteration performs:
+
+Step	Action	Description
+1️⃣	POST	
+Create a new pet/user with random data
+
+2️⃣	GET	
+Fetch the created record by ID
+
+3️⃣	PUT
+Update data dynamically
+
+4️⃣	GET	
+Validate the updated record
+
+5️⃣	DELETE
+Remove the record from the server
 
 
-5️⃣ View test results
-After execution, Playwright generates a report:
-npx playwright show-report
+✅ Assertions
+
+Each step validates:
+HTTP Status Codes
+Response JSON structure
+Updated data verification
 
 
-🧩 CRUD Flow Summary
-Step	Operation	Description
-1️⃣	Create Pet	Generates faker pet data and sends POST request
-2️⃣	Get Pets	Fetches data from the data base
-3️⃣	Update Pet	Changes status 
-4️⃣	Delete Pet	Deletes pet and validates response
+🧱 Key Concepts
+
+🔹Modular Design: Reusable API layers (no hardcoded logic)
+🔹Faker Integration: Auto-generate new data every execution
+🔹 Config Driven: Base URL read dynamically from properties file
+🔹Enum Usage: Clean endpoint management
+🔹Iterative Flow: Repeats CRUD steps multiple times automatically
 
 
+example console output:
 
-🛠️ Tech Stack
-Tool	Purpose
-Playwright	Test Runner & Automation Framework
-Axios	API Request Handling
-TypeScript	Type Safety & Maintainability
-Faker.js / Custom Library	Random Data Generation
-Node.js	Runtime Environment
+iteration 1 started
+✅created #(status code:200)
+✅get     #(status code:200)
+✅update  #(status code:200)
+✅delete  #(status code:200)
 
+🚀 Future Enhancements
 
-
-📊 Example Log Output
-🐾 Iteration 1 started...
-
-✅ Pet Created: { id: 6000, name: 'Monique', status: 'available' }
-🐶 Pets Count: 228
-🔄 Pet Updated: { id: 6000, status: 'sold' }
-🗑️ Pet Deleted: 6000
-✅ Iteration 1 completed successfully!
-
-🎉 All CRUD function calls completed successfully!
-
+Schema validation 
+Detailed HTML test reports
+Jenkins / CI integration
 
 
 👨‍💻 Author
-Suganthan S.
+Playwright API Automation – CRUD Framework Practice
