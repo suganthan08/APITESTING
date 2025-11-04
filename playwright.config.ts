@@ -23,7 +23,7 @@ export default defineConfig({
   projects: [
     {
       name: 'API Tests',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Chromeium'] },
     },
   ],
 });
