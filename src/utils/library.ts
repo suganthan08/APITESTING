@@ -1,7 +1,7 @@
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
-export const library = {
-  randomId: () => faker.number.int({ min: 1000, max: 9999 }),
-  randomName: () => faker.person.firstName(),
-  randomStatus: () => faker.helpers.arrayElement(['available', 'pending', 'sold'])
-};
+export const generateUser = () => ({
+  name: faker.person.fullName(),
+  age: faker.number.int({ min: 18, max: 60 }),
+  job: faker.person.jobTitle()
+});

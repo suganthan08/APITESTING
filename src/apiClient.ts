@@ -1,22 +1,24 @@
-import axios from 'axios';
-import * as fs from 'fs';
+import propertiesReader from "properties-reader";
+import path from "path";
+import { APIRequestContext } from "@playwright/test";
+import { Endpoints } from "./enum";
 
-function getProperty(key: string): string {
-  const file = fs.readFileSync('config.properties', 'utf-8');
-  const line = file.split('\n').find(l => l.startsWith(key));
-  return line ? line.split('=')[1].trim() : '';
-}
+const properties = propertiesReader(path.resolve(__dirname, "./config.properties"));
 
-const BASE_URL = getProperty('baseUrl');
+export const baseUrl: string = properties.get("baseUrl") as string;
 
-export const client = axios.create({
-  baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-});
+export const createUser = async (request: APIRequestContext, data: any) => {
+  return await request.post(`${baseUrl}${Endpoints.USERS}`, { data });
+};
 
-export const apiClient = {
-  get: async (endpoint: string) => await client.get(endpoint),
-  post: async (endpoint: string, data: any) => await client.post(endpoint, data),
-  put: async (endpoint: string, data: any) => await client.put(endpoint, data),
-  delete: async (endpoint: string) => await client.delete(endpoint),
+export const getUser = async (request: APIRequestContext, id: string) => {
+  return await request.get(`${baseUrl}${Endpoints.USERS}/${id}`);
+};
+
+export const updateUser = async (request: APIRequestContext, id: string, data: any) => {
+  return await request.put(`${baseUrl}${Endpoints.USERS}/${id}`, { data });
+};
+
+export const deleteUser = async (request: APIRequestContext, id: string) => {
+  return await request.delete(`${baseUrl}${Endpoints.USERS}/${id}`);
 };

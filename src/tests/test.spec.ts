@@ -1,56 +1,61 @@
-import { test, expect } from '@playwright/test';
-import { apiClient } from '../apiClient';
-import { Endpoints } from '../enum';
-import { library } from '../utils/library';
+;import { test, expect } from "@playwright/test";
+import { generateUser } from "../utils/library";
+import { createUser, getUser, updateUser, deleteUser } from "../apiClient";
+import { StatusCodes } from "../enum";
 
-// 🧩 Reusable functions
-async function createPet() {
-  const newPet = {
-    id: library.randomId(),
-    name: library.randomName(),
-    status: library.randomStatus(),
-  };
-  const res = await apiClient.post(Endpoints.PET, newPet);
-  expect(res.status).toBe(200);
-  console.log('✅ Pet Created:', res.data);
-  return newPet;
-}
+test("CRUD API Flow Loop", async ({ request }) => {
+  const LOOP_COUNT = 1;
 
-async function getPets() {
-  const res = await apiClient.get(Endpoints.PET_BY_STATUS);
-  expect(res.status).toBe(200);
-  console.log('🐶 Pets Count:', res.data.length);
-}
+  for (let i = 1; i <= LOOP_COUNT; i++) {
+    console.log(`\n========== LOOP #${i} ==========`);
 
-async function updatePet(pet: any) {
-  const updatedPet = { ...pet, status: 'sold' };
-  const res = await apiClient.put(Endpoints.PET, updatedPet);
-  expect(res.status).toBe(200);
-  console.log('🔄 Pet Updated:', res.data);
-}
+    //
+    // ✅ CREATE
+    //
+    const userData = generateUser();
+    const createRes = await createUser(request, userData);
+    expect(createRes.status()).toBe(StatusCodes.CREATED);
 
-async function deletePet(petId: number) {
-  try {
-    const res = await apiClient.delete(`${Endpoints.PET}/${petId}`);
-    expect(res.status).toBe(200);
-    console.log('🗑️ Pet Deleted:', petId);
-  } catch (error: any) {
-    console.warn(`⚠️ Delete failed for pet ID: ${petId}`, error.message);
+    const created = await createRes.json();
+    console.log("✅ Created:", created);
+    const userId = created._id;
+
+
+    //
+    // ✅ GET (after create)
+    //
+    const getRes = await getUser(request, userId);
+    expect(getRes.status()).toBe(StatusCodes.OK);
+
+    const fetched = await getRes.json();
+    console.log("✅ Fetched:", fetched);
+
+
+    //
+    // ✅ UPDATE (fetched user)
+    //
+    const newUpdatedData = generateUser();
+    const updateRes = await updateUser(request, userId, newUpdatedData);
+    expect(updateRes.status()).toBe(StatusCodes.UPDATED);
+
+    console.log("✅ Updated:", newUpdatedData);
+
+
+    //
+    // ✅ GET (after update -> verify change)
+    //
+    const verifyRes = await getUser(request, userId);
+    expect(verifyRes.status()).toBe(StatusCodes.OK);
+
+    const verifyUser = await verifyRes.json();
+    console.log("✅ Verified updated:", verifyUser);
+
+
+    //
+    // ✅ DELETE
+    //
+    const deleteRes = await deleteUser(request, userId);
+    expect([StatusCodes.OK, StatusCodes.DELETED]).toContain(deleteRes.status());
+    console.log("✅ Deleted:", userId);
   }
-}
-
-async function runCrudFlow() {
-  const newPet = await createPet();
-  await getPets();
-  await updatePet(newPet);
-  await deletePet(newPet.id);
-}
-
-test('Swagger Petstore CRUD Function-based Automation', async () => {
-  for (let i = 0; i < 1; i++) {
-    console.log(`\n🐾 Iteration ${i + 1} started...\n`);
-    await runCrudFlow();
-    console.log(`✅ Iteration ${i + 1} completed successfully!\n`);
-  }
-  console.log('🎉 All CRUD function calls completed successfully!');
 });
