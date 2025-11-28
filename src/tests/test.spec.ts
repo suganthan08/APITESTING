@@ -1,4 +1,4 @@
-; import { test, expect } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { generateUser } from "../utils/library";
 import { createUser, getUser, updateUser, deleteUser } from "../apiClient";
 import { StatusCodes } from "../enum";
