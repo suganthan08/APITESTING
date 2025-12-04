@@ -5,6 +5,8 @@ export interface CreateUserResponse {
   age: number;
   job: string;
   _id: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const createUserSchema: JSONSchemaType<CreateUserResponse> = {
@@ -14,7 +16,9 @@ export const createUserSchema: JSONSchemaType<CreateUserResponse> = {
     age: { type: "integer", minimum: 18, maximum: 60 },
     job: { type: "string" },
     _id: { type: "string" },
+    createdAt: { type: "string" },
+    updatedAt: { type: "string" },
   },
-  required: ["name", "age", "job", "_id"],
+  required: ["name", "age", "job", "_id", "createdAt", "updatedAt"],
   additionalProperties: false,
 };
