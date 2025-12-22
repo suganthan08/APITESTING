@@ -8,9 +8,7 @@ import { createUserSchema } from "../schemas/createUserSchema";
 import { updateUserSchema } from "../schemas/updateUserSchema";
 
 test("Validate Schema for CREATE and UPDATE response", async ({ request }) => {
-  //
   // ✅ CREATE
-  //
   const userPayload = generateUser();
   const createRes = await createUser(request, userPayload);
   expect(createRes.status()).toBe(StatusCodes.CREATED);
