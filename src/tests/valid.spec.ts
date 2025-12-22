@@ -21,9 +21,7 @@ test("Validate Schema for CREATE and UPDATE response", async ({ request }) => {
 
   const userId = createdBody._id;
 
-  //
   // ✅ UPDATE (PUT)
-  //
   const updatedUserData = generateUser();
   const updateRes = await updateUser(request, userId, updatedUserData);
   expect(updateRes.status()).toBe(StatusCodes.UPDATED);
