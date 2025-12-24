@@ -8,33 +8,33 @@ import { createUserSchema } from "../schemas/createUserSchema";
 import { updateUserSchema } from "../schemas/updateUserSchema";
 
 test("Validate Schema for CREATE and UPDATE response", async ({ request }) => {
-  //  CREATE
+  // ✅ CREATE
   const userPayload = generateUser();
   const createRes = await createUser(request, userPayload);
   expect(createRes.status()).toBe(StatusCodes.CREATED);
 
   const createdBody = await createRes.json();
-  console.log(" Created Response:", createdBody);
+  console.log("✅ Created Response:", createdBody);
 
-  //  validate CREATE schema
+  // ✅ validate CREATE schema
   expect(validateSchema(createUserSchema, createdBody)).toBeTruthy();
 
   const userId = createdBody._id;
 
-  //  UPDATE (PUT)
+  // ✅ UPDATE (PUT)
   const updatedUserData = generateUser();
   const updateRes = await updateUser(request, userId, updatedUserData);
   expect(updateRes.status()).toBe(StatusCodes.UPDATED);
 
   //
-  //  GET updated user
+  // ✅ GET updated user
   //
   const verifyRes = await getUser(request, userId);
   expect(verifyRes.status()).toBe(StatusCodes.OK);
 
   const updatedUser = await verifyRes.json();
-  console.log(" Updated User Response:", updatedUser);
+  console.log("✅ Updated User Response:", updatedUser);
 
-  //  validate UPDATE schema
+  // ✅ validate UPDATE schema
   expect(validateSchema(updateUserSchema, updatedUser)).toBeTruthy();
 });
