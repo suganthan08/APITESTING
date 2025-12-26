@@ -7,7 +7,6 @@ test("CRUD API Flow Loop", async ({ request }) => {
   const LOOP_COUNT = 1;
 
   for (let i = 1; i <= LOOP_COUNT; i++) {
-    console.log(`\n----------------- LOOP #${i} ----------------------`);
 
     //
     // ✅ CREATE USER
